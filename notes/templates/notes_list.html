@@ -5,7 +5,8 @@
     <h2>Ваши заметки</h2>
     <ul>
         {% for note in notes %}
-            <li>{{ note.title }} - {{ note.description }}</li>
+            <li>{{ note.title }}</li>
+            <ul>{{ note.description }}</ul>
         {% endfor %}
     </ul>
 {% endblock %}
