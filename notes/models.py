@@ -1,9 +1,10 @@
-from django.db import models
 from django.contrib.auth import get_user_model
-#from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+
+# from django.contrib.auth.models import AbstractUser
 
 class Note(models.Model):
-
     title = models.CharField(max_length=200, verbose_name='Тема заметки')
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -12,7 +13,3 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
-
-#class CustomUser(AbstractUser):
-    # Добавьте дополнительные поля, если необходимо
-#    pass

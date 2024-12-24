@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, permissions
-from .serializers import NoteSerializer, UserSerializer
 from django.shortcuts import render
-#from django import request
+from rest_framework import generics, permissions
+
+# from django import request
 from .models import Note
+from .serializers import NoteSerializer, UserSerializer
 
 
 # Представления для администраторов:
@@ -25,18 +26,14 @@ class NoteList(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # def get_queryset(request):
     def get_queryset(self):
-        #return Note.objects.filter(user=self.request.user)
-        #return render(request, 'notes_list.html', {'notes': notes})
-        #return render(self.request, 'notes_list.html', {'notes': Note.objects.filter(user=self.request.user)})
-        notes = Note.objects.filter(user=self.request.user)
-        print(notes[0].description)
-        print(notes[0].title)
-        print(self.request.user)
-        return render(self.request, 'notes_list.html', {'notes':  notes})
+        return Note.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def perform_create(self, serializer_class):
+        serializer_class.save(user=self.request.user)
+        #Note.objects.save(user=self.request.user)
+
 
 
 class NoteDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -46,3 +43,14 @@ class NoteDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Note.objects.filter(user=self.request.user)
+
+
+class NoteListStart(generics.ListCreateAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_listset(request):
+        notes = Note.objects.filter(user=request.user)
+        # print(notes[0].title) # Отладка
+        return render(request, 'notes_list.html', {'notes': notes})
